@@ -107,7 +107,7 @@
     body {
       font-family: Helvetica, Arial, sans-serif;
       color: #0d122b;
-      display: flex;
+      /* display: flex; */
       flex-direction: column;
       /* padding-left: 1em;
       padding-right: 1em; */
@@ -121,14 +121,16 @@
       margin-bottom: 2em;
     }
     main {
-      flex-grow: 2;
-      justify-content: space-around;
+      /* flex-grow: 2; */
+      /* justify-content: space-around; */
       align-items: center;
       background-color: #fff;
       border-radius: 12px;
       margin-bottom: 2em;
-      padding-top: 4em;
-      text-align: center;
+      /* padding-top: 4em; */
+      margin-right: 10em;
+      margin-left: 10em;
+      text-align: left;
     }
     @keyframes bg-pulse {
       0% {
@@ -143,35 +145,43 @@
         backgrouond-color: #fff;
       }
     }
-    main.speaking {
+    /* main.speaking {
       animation: bg-pulse 1.5s alternate ease-in-out infinite;
-    }
+    } */
     #result {
       color: #666;
       font-style: italic;
-      text-align: center;
+      text-align: left;
+      padding-left: 2em;
+      padding-right: 2em;
     }
     #result .final {
       color: #0d122b;
       font-style: normal;
+      text-align: left;
+      padding-left: 1em;
+      padding-right: 1em;
     }
     button {
-      font-size: 18px;
-      font-weight: 200;
-      padding: 1em;
-      width: 200px;
-      background: transparent;
-      border: 4px solid #f22f46;
-      border-radius: 4px;
-      transition: all 0.4s ease 0s;
-      cursor: pointer;
-      color: #f22f46;
-      margin-bottom: 4em;
+      background-color: #4CAF50; /* Green */
+      border:#fff;
+      width: 20%;
+      border-radius: 12px;
+      margin-left: 40%;
+      margin-right: 40%;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
     }
     button:hover,
     button:focus {
       background: #f22f46;
       color: #fff;
+      outline: none;
+      border-radius: 12px;
     }
     
     a {
@@ -181,17 +191,18 @@
       color: #f22f46;
       text-align: center;
     }
-    footer {
-      border-top: 1px solid #0d122b;
-      text-align: center;
-    }
       </style>
     </head>
     <body>
+      <button id="button" >Start listening</button>
+      <br>
+      <br>
       <main>
-        <button id="button">Start listening</button>
+        
         <div id="result"></div>
       </main>
+
+
       <script>
         window.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("button");
