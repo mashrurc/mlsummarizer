@@ -90,120 +90,158 @@
       </div>
     </div>
   </section>
-  
   <!DOCTYPE html>
   <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Speech Detection</title>
-  </head>
-  <body>
-    <button class="button" onclick="startRecord()" style="margin-left: 45%" >Start</button>
-    <br>
-    <br>
-    <button class="button" onclick="pauseRecord()" style="margin-left: 45%" >Stop</button>
-  
-    <div class="words" contenteditable>
-    </div>
-  
-   
-  <script>
-         
-    function startRecord(){
-      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-  const recognition = new SpeechRecognition();
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <title>Browser speech recognition</title>
+      <style>
     
-     
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      color: #0d122b;
+      display: flex;
+      flex-direction: column;
+      /* padding-left: 1em;
+      padding-right: 1em; */
+    }
+    h1 {
+      text-align: center;
+      font-weight: 100;
+    }
+    header {
+      border-bottom: 1px solid #0d122b;
+      margin-bottom: 2em;
+    }
+    main {
+      flex-grow: 2;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 12px;
+      margin-bottom: 2em;
+      padding-top: 4em;
+      text-align: center;
+    }
+    @keyframes bg-pulse {
+      0% {
+        background-color: #fff;
+      }
     
-    let p = document.createElement('p');
-    const words = document.querySelector('.words');
-    words.appendChild(p);
-    recognition.addEventListener('result', e => {
-      const transcript = Array.from(e.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
+      50% {
+        background-color: #c7ecee;
+      }
+    
+      100% {
+        backgrouond-color: #fff;
+      }
+    }
+    main.speaking {
+      animation: bg-pulse 1.5s alternate ease-in-out infinite;
+    }
+    #result {
+      color: #666;
+      font-style: italic;
+      text-align: center;
+    }
+    #result .final {
+      color: #0d122b;
+      font-style: normal;
+    }
+    button {
+      font-size: 18px;
+      font-weight: 200;
+      padding: 1em;
+      width: 200px;
+      background: transparent;
+      border: 4px solid #f22f46;
+      border-radius: 4px;
+      transition: all 0.4s ease 0s;
+      cursor: pointer;
+      color: #f22f46;
+      margin-bottom: 4em;
+    }
+    button:hover,
+    button:focus {
+      background: #f22f46;
+      color: #fff;
+    }
+    
+    a {
+      color: #0d122b;
+    }
+    .error {
+      color: #f22f46;
+      text-align: center;
+    }
+    footer {
+      border-top: 1px solid #0d122b;
+      text-align: center;
+    }
+      </style>
+    </head>
+    <body>
+      <main>
+        <button id="button">Start listening</button>
+        <div id="result"></div>
+      </main>
+      <script>
+        window.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("button");
+    const result = document.getElementById("result");
+    const main = document.getElementsByTagName("main")[0];
   
-       
-        p.textContent = transcript;
-  
-        if (e.results[0].isFinal) {
-          p = document.createElement('p');
-          words.appendChild(p);
-          console.log(words);
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (typeof SpeechRecognition === "undefined") {
+      button.remove();
+      const message = document.getElementById("message");
+      message.removeAttribute("hidden");
+      message.setAttribute("aria-hidden", "false");
+    } else {
+      let listening = false;
+      const recognition = new SpeechRecognition();
+      const start = () => {
+        recognition.start();
+        button.textContent = "Stop listening";
+        main.classList.add("speaking");
+      };
+      const stop = () => {
+        recognition.stop();
+        button.textContent = "Start listening";
+        main.classList.remove("speaking");
+      };
+      const onResult = event => {
+        result.innerHTML = "";
+        for (const res of event.results) {
+          const text = document.createTextNode(res[0].transcript);
+          const p = document.createElement("p");
+          if (res.isFinal) {
+            p.classList.add("final");
+          }
+          p.appendChild(text);
+          result.appendChild(p);
         }
-    });
-  
-    recognition.addEventListener('end', recognition.start);
-  
-    recognition.start();
-
-    
-  
-    }
-    function pauseRecord(){
-      recognition.addEventListener('end', recognition.stop);
-      recognition.stop();
-    }
-    
-    
-  
-  </script>
-  
-  
-    <style>
-      /* html {
-        font-size: 10px;
       }
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.addEventListener("result", onResult);
+      button.addEventListener("click", () => {
+              listening ? stop() : start();
+              listening = !listening;
+      });
+  }});
   
-      body {
-        background: white;
-        font-family: 'helvetica neue';
-        font-weight: 200;
-        font-size: 20px;
-      } */
-
-      .button {
-        display: table;
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
   
-      .words {
-        max-width: 500px;
-        margin: 50px auto;
-        background: white;
-        border-radius: 5px;
-        padding: 1rem 2rem 1rem 5rem;
-        background-size: 100% 3rem;
-        position: relative;
-      }
-      
-      p {
-        margin: 0 0 3rem;
-      }
   
-      .words:before {
-        content: '';
-        position: absolute;
-        width: 4px;
-        top: 0;
-        left: 30px;
-        bottom: 0;
-        border-color: transparent #efe4e4;
-      }
-    </style>
-  
-  </body>
+      </script>
+    </body>
   </html>
   <!--/ Section Contact-Footer Star /-->
   <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
