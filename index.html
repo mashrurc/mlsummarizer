@@ -90,108 +90,156 @@
       </div>
     </div>
   </section>
-  
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Speech Detection</title>
-  </head>
-  <body>
-    <button class="button" onclick="startRecord()" style="margin-left: 45%" >Start</button>
-  
-    <div class="words" contenteditable>
-    </div>
-  
-   
-  <script>
-    function startRecord(){
-    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-    const recognition = new SpeechRecognition();
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
+     
+      <style>
     
-    let p = document.createElement('p');
-    const words = document.querySelector('.words');
-    words.appendChild(p);
-  
-    recognition.addEventListener('result', e => {
-      const transcript = Array.from(e.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
-  
-       
-        p.textContent = transcript;
-  
-        if (e.results[0].isFinal) {
-          p = document.createElement('p');
-          words.appendChild(p);
-          console.log(words);
-        }
-    });
-  
-    recognition.addEventListener('end', recognition.start);
-  
-    recognition.start();
-  
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
     }
-  
-  </script>
-  
-  
-    <style>
-      /* html {
-        font-size: 10px;
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      color: #0d122b;
+      flex-direction: column;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 100;
+    }
+    header {
+      border-bottom: 1px solid #0d122b;
+      margin-bottom: 2em;
+    }
+    main {
+      align-items: center;
+      background-color: #fff;
+      border-radius: 12px;
+      margin-bottom: 2em;
+      margin-right: 10em;
+      margin-left: 10em;
+      text-align: left;
+    }
+    @keyframes bg-pulse {
+      0% {
+        background-color: #fff;
       }
-  
-      body {
-        background: white;
-        font-family: 'helvetica neue';
-        font-weight: 200;
-        font-size: 20px;
-      } */
+    
+      50% {
+        background-color: #c7ecee;
+      }
+    
+      100% {
+        backgrouond-color: #fff;
+      }
+    }
+    /* main.speaking {
+      animation: bg-pulse 1.5s alternate ease-in-out infinite;
+    } */
+    #result {
+      color: #666;
+      font-style: italic;
+      text-align: left;
+      padding-left: 2em;
+      padding-right: 2em;
+    }
+    #result .final {
+      color: #0d122b;
+      font-style: normal;
+      text-align: left;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+    button {
+      background-color: #4CAF50; /* Green */
+      border:#fff;
+      width: 20%;
+      border-radius: 12px;
+      margin-left: 40%;
+      margin-right: 40%;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+    button:hover,
+    button:focus {
+      background: #f22f46;
+      color: #fff;
+      outline: none;
+      border-radius: 12px;
+    }
+    
+    a {
+      color: #0d122b;
+    }
+    .error {
+      color: #f22f46;
+      text-align: center;
+    }
+      </style>
+    <body>
+      <button id="button" >Start listening</button>
+      <br>
+      <br>
+      <main>
+        
+        <div id="result"></div>
+      </main>
 
-      .button {
-        display: table;
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
+
+      <script>
+        window.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("button");
+    const result = document.getElementById("result");
+    const main = document.getElementsByTagName("main")[0];
   
-      .words {
-        max-width: 500px;
-        margin: 50px auto;
-        background: white;
-        border-radius: 5px;
-        padding: 1rem 2rem 1rem 5rem;
-        background-size: 100% 3rem;
-        position: relative;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (typeof SpeechRecognition === "undefined") {
+      button.remove();
+      const message = document.getElementById("message");
+      message.removeAttribute("hidden");
+      message.setAttribute("aria-hidden", "false");
+    } else {
+      let listening = false;
+      const recognition = new SpeechRecognition();
+      const start = () => {
+        recognition.start();
+        button.textContent = "Stop listening";
+        main.classList.add("speaking");
+      };
+      const stop = () => {
+        recognition.stop();
+        button.textContent = "Start listening";
+        main.classList.remove("speaking");
+      };
+      const onResult = event => {
+        result.innerHTML = "";
+        for (const res of event.results) {
+          const text = document.createTextNode(res[0].transcript);
+          const p = document.createElement("p");
+          if (res.isFinal) {
+            p.classList.add("final");
+          }
+          p.appendChild(text);
+          result.appendChild(p);
+        }
       }
-      
-      p {
-        margin: 0 0 3rem;
-      }
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.addEventListener("result", onResult);
+      button.addEventListener("click", () => {
+              listening ? stop() : start();
+              listening = !listening;
+      });
+  }});
   
-      .words:before {
-        content: '';
-        position: absolute;
-        width: 4px;
-        top: 0;
-        left: 30px;
-        bottom: 0;
-        border-color: transparent #efe4e4;
-      }
-    </style>
   
-  </body>
-  </html>
+  
+      </script>
+    </body>
   <!--/ Section Contact-Footer Star /-->
   <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
     <div class="overlay-mf"></div>
