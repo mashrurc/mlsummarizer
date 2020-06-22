@@ -21,8 +21,8 @@ def background_process():
     try:
         print("AAAAAAAAAAAAAAA")
         lang = request.args.get('proglang', 0, type = str)
-        print(lang.lower()) #prints the value from JS to output
-        return jsonify(result=lang.lower())
+        print(lang) #prints the value from JS to output
+        return jsonify(result=lang)
     except Exception as e:
         return str(e)
 
