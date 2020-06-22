@@ -164,6 +164,20 @@
       display: inline-block;
       font-size: 16px;
     }
+    #button2 {
+      background-color: #333333; /* Green */
+      border:#fff;
+      width: 20%;
+      border-radius: 3px;
+      margin-left: 40%;
+      margin-right: 40%;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
     button:hover,
     button:focus {
       background: #f22f46;
@@ -181,15 +195,34 @@
     }
       </style>
     <body>
+      <p id="ans"></p>
+      <!-- <input id= "result" type=text size=5 name=proglang> -->
       <button id="button" >Start listening</button>
+      
       <br>
       <br>
       <main>
-        <div id="result"></div>
+        <p id="result" type = text size = 5 name = proglang></p>
+
       </main>
+     <button id="button2"><a id="process" >Start</a></button> 
 
-
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <script>
+        $(function() {
+			  $('a#process').bind('click', function() {
+        console.log("AA");
+        var x = document.getElementById("result").textContent;
+        console.log(x)
+				$.getJSON('/background_process', {
+				  proglang: x,
+				}, function(data) {
+          $("#ans").text(data.result); 
+          //returning a value from python with return jsonify(result = "example")
+				});
+				return false;
+			  });
+			});
         window.addEventListener("DOMContentLoaded", () => {
         const button = document.getElementById("button");
         const result = document.getElementById("result");
