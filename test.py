@@ -19,9 +19,10 @@ def index():
 @app.route('/background_process')
 def background_process():
     try:
-        print("AAAAAAAAAAAAAAA")
         lang = request.args.get('proglang', 0, type = str)
+        print("---------------------")
         print(lang) #prints the value from JS to output
+        print("---------------------")
         return jsonify(result=lang)
     except Exception as e:
         return str(e)

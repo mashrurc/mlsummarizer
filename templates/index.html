@@ -205,19 +205,18 @@
         <p id="result" type = text size = 5 name = proglang></p>
 
       </main>
-     <button id="button2"><a id="process" >Start</a></button> 
+      <button id="button2"><a id="process">Start</a></button> 
 
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <script>
         $(function() {
 			  $('a#process').bind('click', function() {
-        console.log("AA");
         var x = document.getElementById("result").textContent;
         console.log(x)
 				$.getJSON('/background_process', {
 				  proglang: x,
 				}, function(data) {
-          $("#ans").text(data.result); 
+          // $("#ans").text(data.result); 
           //returning a value from python with return jsonify(result = "example")
 				});
 				return false;
