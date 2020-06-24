@@ -1,4 +1,6 @@
 from flask import Flask, request, send_from_directory, render_template, jsonify
+import ml
+lecture=""
 
 # set the project root directory as the static folder, you can set others.
 app = Flask(__name__,
@@ -23,6 +25,7 @@ def background_process():
         print("---------------------")
         print(lang) #prints the value from JS to output
         print("---------------------")
+        ml.x=lang #passes speech text to ml.py
         return jsonify(result=lang)
     except Exception as e:
         return str(e)
