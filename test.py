@@ -25,7 +25,9 @@ def background_process():
         print("---------------------")
         print(lang) #prints the value from JS to output
         print("---------------------")
-        ml.x=lang #passes speech text to ml.py
+        ml.document=lang #passes speech text to ml.py
+        for sentence in ml.result_dict["summarize_result"]:
+            print(sentence)
         return jsonify(result=lang)
     except Exception as e:
         return str(e)
