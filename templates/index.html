@@ -216,7 +216,7 @@
 				$.getJSON('/background_process', {
 				  proglang: x,
 				}, function(data) {
-          // $("#ans").text(data.result); 
+          $("#ans").text(data.result); 
           //returning a value from python with return jsonify(result = "example")
 				});
 				return false;

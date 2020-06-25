@@ -1,5 +1,6 @@
 from flask import Flask, request, send_from_directory, render_template, jsonify
-import ml
+from gensim.summarization import keywords
+# from ml import processData
 lecture=""
 
 # set the project root directory as the static folder, you can set others.
@@ -9,6 +10,10 @@ app = Flask(__name__,
 # @app.route('/js/<path:path>')
 # def send_js(path):
 #     return send_from_directory('js', path)
+def processData(theData):
+    text = theData
+    x = keywords(text).split('\n')
+    return x
 
 @app.route('/')
 def index():
@@ -25,10 +30,12 @@ def background_process():
         print("---------------------")
         print(lang) #prints the value from JS to output
         print("---------------------")
-        ml.document=lang #passes speech text to ml.py
-        for sentence in ml.result_dict["summarize_result"]:
-            print(sentence)
-        return jsonify(result=lang)
+        t = processData(lang)
+        # ml.document=lang #passes speech text to ml.py
+        # for sentence in ml.result_dict["summarize_result"]:
+        #     print(sentence)
+        #     print("AAA")
+        return jsonify(result=t)
     except Exception as e:
         return str(e)
 
