@@ -60,6 +60,9 @@ a:hover {
 
 .box-shadow-a,
 .button:hover {
+  display: table-cell;
+vertical-align: middle;
+  padding: 5 5 5 5;
   box-shadow: 0 0 0 4px #f5dcdc;
 }
 
@@ -1130,8 +1133,10 @@ footer .credits a {
 ======================================*/
 
 .button {
-  display: inline-block;
-  padding: .3rem .6rem;
+  display: table-cell;
+vertical-align: middle;
+  /* display: inline-block; */
+  /* padding: .3rem .6rem; */
   text-align: center;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -1146,27 +1151,45 @@ footer .credits a {
 }
 
 .button:focus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: 0;
 }
 
 .button:hover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #9c0d0d;
   color: #fff;
   transition: all 500ms ease;
 }
 
 .button-a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
   background-color: #be3131;
   color: #fff;
   border-color: #f5dcdc;
 }
 
 .button-big {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   padding: .9rem 2.3rem;
   font-size: 1.2rem;
 }
 
 .button-rouded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   border-radius: 5rem;
 }
 
