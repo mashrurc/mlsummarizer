@@ -6,37 +6,74 @@ text = "Nuclear power is a clean and efficient way of boiling water to make stea
 text = text.replace(".", "")
 text = text.replace(",", "")
 y = set(text.split(" "))
-y=list(y)
-x = keywords(text, words=100,scores=True, lemmatize = True)
-x=list(x)
+y = list(y)
+x = keywords(text, words=100, scores=True, lemmatize=True)
+x = list(x)
 
-gen=[]
+gen = []
 for i in x:
-    i=list(i)
+    i = list(i)
     gen.append(i)
 
 wList = []
 for w in y:
-    freq=round(float(zipf_frequency(w, 'en')), 3)
-    wList.append([round((10-freq)/10,2), w])
+    freq = round(float(zipf_frequency(w, 'en')), 3)
+    wList.append([round((10 - freq) / 10, 2), w])
 print(wList)
 
 print("before", gen)
-added=[]
+added = []
 for a in range(len(gen)):
     for b in range(len(wList)):
         if wList[b][1] in gen[a][0]:
-            gen[a][1]+=wList[b][0]
+            gen[a][1] += wList[b][0]
             added.append(wList[b][1])
         else:
             if wList[b][1] not in added:
-                gen.append([wList[b][1],wList[b][0]])
+                gen.append([wList[b][1], wList[b][0]])
 
-gen.sort(key = lambda test_list: test_list[1])    
+# Creates a text document of low weighed words to be avoided 
+# stopwords=""
+# for p in range(len(wList)):
+#     if wList[p][0]<0.4:
+#         stopwords+=wList[p][1]+" "
+# tf = open("stopwords.txt", "w")
+# tf.write(stopwords)
+# tf.close()
+
+# Takes the higher weighted words and creates a seperate string with them to be run through genism again for a refined search
+# document2 = ""
+# for p in range(len(wList)):
+#     if p > len(wList) / 2:
+#         document2 += wList[p][1] + " "
+# print(document2)
+#
+# print("----------------------------")
+#
+# from rake_nltk import Rake, Metric
+# r = Rake("stopwords.txt", max_length=10)
+# keywords1 = r.extract_keywords_from_sentences(text)
+# keyphrases = r.get_ranked_phrases_with_scores
+# keywords2 = r.extract_keywords_from_text(keyphrases[0][0])
+# print(keywords1)
+
+def indexedSort(array):
+    l = len(array)
+    for i in range(0, l):
+        for j in range(0, l - i - 1):
+            if array[j][1] > array[j + 1][1]:
+                tempo = array[j]
+                array[j] = array[j + 1]
+                array[j + 1] = tempo
+    return array
+
+print(indexedSort(gen))
+
+###########################################################################################
 
 # print(y)
 # for t in y:
-#     if (1 - round(float(word_frequency(t, 'en'))*10000, 3)) > 0: 
+#     if (1 - round(float(word_frequency(t, 'en'))*10000, 3)) > 0:
 #         numb = ((1 - round(float(word_frequency(t, 'en'))*10000, 3))+ x[c][1])/2
 #         tList.append([numb, t])
 #     c+=1
@@ -44,8 +81,6 @@ gen.sort(key = lambda test_list: test_list[1])
 # print(sorted(tList))
 
 # print(tList)
-
-###########################################################################################
 
 # from rake_nltk import Rake, Metric
 # from collections import Counter
