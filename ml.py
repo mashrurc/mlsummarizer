@@ -32,30 +32,6 @@ for a in range(len(gen)):
             if wList[b][1] not in added:
                 gen.append([wList[b][1], wList[b][0]])
 
-# Creates a text document of low weighed words to be avoided 
-# stopwords=""
-# for p in range(len(wList)):
-#     if wList[p][0]<0.4:
-#         stopwords+=wList[p][1]+" "
-# tf = open("stopwords.txt", "w")
-# tf.write(stopwords)
-# tf.close()
-
-# Takes the higher weighted words and creates a seperate string with them to be run through genism again for a refined search
-# document2 = ""
-# for p in range(len(wList)):
-#     if p > len(wList) / 2:
-#         document2 += wList[p][1] + " "
-# print(document2)
-#
-# print("----------------------------")
-#
-# from rake_nltk import Rake, Metric
-# r = Rake("stopwords.txt", max_length=10)
-# keywords1 = r.extract_keywords_from_sentences(text)
-# keyphrases = r.get_ranked_phrases_with_scores
-# keywords2 = r.extract_keywords_from_text(keyphrases[0][0])
-# print(keywords1)
 
 def indexedSort(array):
     l = len(array)
@@ -123,3 +99,32 @@ print(indexedSort(gen))
 # # Output result.
 # for sentence in result_dict["summarize_result"]:
 #     print(sentence)
+
+
+
+############################################################################################
+
+# Creates a text document of low weighed words to be avoided
+# stopwords=""
+# for p in range(len(wList)):
+#     if wList[p][0]<0.4:
+#         stopwords+=wList[p][1]+" "
+# tf = open("stopwords.txt", "w")
+# tf.write(stopwords)
+# tf.close()
+
+# Takes the higher weighted words and creates a seperate string with them to be run through genism again for a refined search
+# document2 = ""
+# for p in range(len(wList)):
+#     if p > len(wList) / 2:
+#         document2 += wList[p][1] + " "
+# print(document2)
+#
+# print("----------------------------")
+#
+# from rake_nltk import Rake, Metric
+# r = Rake("stopwords.txt", max_length=10)
+# keywords1 = r.extract_keywords_from_sentences(text)
+# keyphrases = r.get_ranked_phrases_with_scores
+# keywords2 = r.extract_keywords_from_text(keyphrases[0][0])
+# print(keywords1)
