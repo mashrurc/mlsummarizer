@@ -22,7 +22,8 @@ text = "Nuclear power is a clean and efficient way of boiling water to make stea
        "States. As of 2018, a total of 30 countries worldwide are operating 450 nuclear reactors for electricity " \
        "generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the " \
        "industry benchmark for reactor design and construction and helping utility customers operate their plants " \
-       "safely and reliably. "
+       "safely and reliably."
+
 print("--------------------\n", text, "\n-----------------------\n")
 
 # =========================TEXT AND ARRAY FOMATTING=========================#
@@ -32,6 +33,7 @@ text = text.replace(".", "")
 text = text.replace(",", "")
 y = set(text.split(" "))
 y = list(y)
+print(y)
 
 # run genism keyword extraction and covert result into a list
 x = keywords(text, words=100, scores=True, lemmatize=True)
@@ -74,16 +76,13 @@ print("OUR WEIGHTS------------------------\n", wList, "\n")
 tbd = []
 for a in range(len(wList) - 1):
     for b in range(len(wList) - 1):
-        print(a, b)
-        if wList[a][1].lower() == wList[b][1].lower() and wList[a][1] != wList[b][
-            1]:  # identifies duplicate words with different capitalization
-            print("Same", wList[a][1], wList[b][1])
+        if wList[a][1].lower() == wList[b][1].lower() and wList[a][1] != wList[b][1]:  # identifies duplicate words with different capitalization
+            #print("Same", wList[a][1], wList[b][1])
             wList[a][0] = (wList[a][0] + wList[b][0]) / 2  # average both duplicate weights
             tbd.append(wList[b][1])  # store name of word to be deleted
-        if wList[a][1] in wList[b][1]:
-            if wList[b][1] == wList[a][1] + "ing" or wList[b][1] == wList[a][
-                1] + "s":  # identifies plural and verb forms of word
-                print(wList[a][1], wList[b][1])
+        # if wList[a][1] in wList[b][1]:
+        #     if wList[b][1] == wList[a][1] + "ing" or wList[b][1] == wList[a][1] + "s":  # identifies plural and verb forms of word
+        #         #print(wList[a][1], wList[b][1])
 
 # loop through tbd and delete each word
 
@@ -95,18 +94,34 @@ custom_boost = 0
 
 added = []  # keeps track of what has been added
 boosts = []  # keeps track of boosts applied to each word
-for a in range(len(gen)):
-    for b in range(len(wList)):
-        if wList[b][1] in gen[a][0]:
-            gen[a][1] += wList[b][
-                             0] + custom_boost  # for each word in genism keyword, add our custom weight to the genism weight
-            added.append(wList[b][1])
-            # boosts.append(wList[b][1]) #debug purposes
-            # boosts.append(wList[b][0]-(len(gen[a][0])/80)) #debug purposes
-        else:
-            if wList[b][1] not in added:  # if the word isn't in any list returned by genism, create a new entry
-                gen.append([wList[b][1], wList[b][0] + custom_boost])
-                added.append(wList[b][1])
+
+# for a in range(len(gen)):
+#     for b in range(len(wList)):
+#         if wList[b][1] in gen[a][0]:
+#             gen[a][1] += (gen[a][1]+wList[b][0])/2 + custom_boost  # for each word in genism keyword, add our custom weight to the genism weight
+#             added.append(wList[b][1])
+#             # boosts.append(wList[b][1]) #debug purposes
+#             # boosts.append(wList[b][0]-(len(gen[a][0])/80)) #debug purposes
+#         else:
+#             if wList[b][1] not in added:  # if the word isn't in any list returned by genism, create a new entry
+#                 gen.append([wList[b][1], wList[b][0] + custom_boost])
+#                 added.append(wList[b][1])
+
+added=[]
+for i in range(len(gen)):
+    #for word in gen[i][0].split(" "):
+        for a in wList:
+            if a[1] in gen[i][0].split(" "):
+                #print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
+                gen[i][1]+=a[0]+custom_boost
+                #print("result", gen[i][1])
+                if a[1] not in added:
+                    added.append(a[1])
+
+for w in wList:
+    gen.append([w[1],w[0]])
+
+
 
 print("NEW GEN-------------------------------\n", gen, "\n")
 
