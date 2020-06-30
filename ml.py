@@ -44,22 +44,26 @@ gen = []
 for i in x:
     i = list(i)
     gen.append(i)
-print("GEN WEIGHTS------------------------\n", gen, "\n")
 
+for i in range(len(gen)):
+    temp = gen[i][0]
+    gen[i][0] = gen[i][1]
+    gen[i][1] = temp
+print("GEN WEIGHTS------------------------\n", gen, "\n")
 
 # =========================FUNCTIONS=========================#
 
 # Weighted Sorting
 # sort algorithm sorts the gen list by weight ascending
-def indexedSort(array):
-    l = len(array)
-    for i in range(0, l):
-        for j in range(0, l - i - 1):
-            if array[j][1] > array[j + 1][1]:
-                tempo = array[j]
-                array[j] = array[j + 1]
-                array[j + 1] = tempo
-    return array
+# def indexedSort(array):
+#     l = len(array)
+#     for i in range(0, l):
+#         for j in range(0, l - i - 1):
+#             if array[j][1] > array[j + 1][1]:
+#                 tempo = array[j]
+#                 array[j] = array[j + 1]
+#                 array[j + 1] = tempo
+#     return array
 
 
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
@@ -77,7 +81,7 @@ tbd = []
 for a in range(len(wList) - 1):
     for b in range(len(wList) - 1):
         if wList[a][1].lower() == wList[b][1].lower() and wList[a][1] != wList[b][1]:  # identifies duplicate words with different capitalization
-            #print("Same", wList[a][1], wList[b][1])
+            # print("Same", wList[a][1], wList[b][1])
             wList[a][0] = (wList[a][0] + wList[b][0]) / 2  # average both duplicate weights
             tbd.append(wList[b][1])  # store name of word to be deleted
         # if wList[a][1] in wList[b][1]:
@@ -107,29 +111,27 @@ boosts = []  # keeps track of boosts applied to each word
 #                 gen.append([wList[b][1], wList[b][0] + custom_boost])
 #                 added.append(wList[b][1])
 
-added=[]
+added = []
 for i in range(len(gen)):
-    #for word in gen[i][0].split(" "):
-        for a in wList:
-            if a[1] in gen[i][0].split(" "):
-                #print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
-                gen[i][1]+=a[0]+custom_boost
-                #print("result", gen[i][1])
-                if a[1] not in added:
-                    added.append(a[1])
+    # for word in gen[i][0].split(" "):
+    for a in wList:
+        if a[1] in gen[i][1].split(" "):
+            # print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
+            gen[i][0] += a[0] + custom_boost
+            # print("result", gen[i][1])
+            if a[1] not in added:
+                added.append(a[1])
 
 for w in wList:
-    gen.append([w[1],w[0]])
+    gen.append([w[0], w[1]])
 
-
-
-print("NEW GEN-------------------------------\n", gen, "\n")
+print("NEW GEN-------------------------------\n", sorted(gen), "\n")
 
 # =========================DEBUG=========================#
 
-print(text.count("fission"))
-for i in indexedSort(gen):
-    print(i)
+# print(text.count("fission"))
+# for i in gen:
+#     print(i)
 
 # =========================EXTRA/UNUSED CODE=========================#
 
