@@ -267,8 +267,40 @@
           });
   }});
   
-  
-  
+  function getArticleList() {
+
+var searchFor = document.getElementById('intext').value;
+var response="";
+console.log(searchFor);
+$.ajax({
+   url: "https://en.wikipedia.org/w/api.php?action=opensearch&search="+searchFor+"&limit=5",
+   dataType: 'jsonp',
+   success: function(data){    
+       console.log(data);
+       response=data;
+   }
+}).done(function(response) {
+     console.log(response);
+     document.querySelector.artName.innerText = response.object[1];
+     document.querySelector.textArt.innerText = response.object[0];
+     document.querySelector.href = response.object[2];
+ });
+}
+
+//QUERY FROM WIKIPEDIA CODE WIP
+var url = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&page=Most%20common%20words%20in%20Spanish';
+
+fetch(url)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(response){
+    html_code = response["parse"]["text"]["*"];
+    parser = new DOMParser();
+    html = parser.parseFromString(html_code, "text/html");
+    var tables = html.querySelectorAll(".wikitable");
+    console.log(tables);
+  })
       </script>
     </body>
   <!--/ Section Contact-Footer Star /-->
