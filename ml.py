@@ -5,7 +5,24 @@ from wordfreq import zipf_frequency, word_frequency
 from gensim.summarization import keywords
 
 # Sample Text
-text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process called fission the splitting of uranium atoms in a nuclear reactor. Uranium fuel consists of small, hard ceramic pellets that are packaged into long, vertical tubes. Bundles of this fuel are inserted into the reactor. A single uranium pellet, slightly larger than a pencil eraser, contains the same energy as a ton of coal, 3 barrels of oil, or 17,000 cubic feet of natural gas. Each uranium fuel pellet provides up to five years of heat for power generation. And because uranium is one of the world's most abundant metals, it can provide fuel for the world's commercial nuclear plants for generations to come. Nuclear power offers many benefits for the environment as well. Power plants don't burn any materials so they produce no combustion by-products. Additionally, because they don't produce greenhouse gases, nuclear plants help protect air quality and mitigate climate change. When it comes to efficiency and reliability, no other electricity source can match nuclear. Nuclear power plants can continuously generate large-scale, around-the-clock electricity for many months at a time, without interruption. Currently, nuclear energy supplies 12 percent of the world's electricity and approximately 20 percent of the energy in the United States. As of 2018, a total of 30 countries worldwide are operating 450 nuclear reactors for electricity generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the industry benchmark for reactor design and construction and helping utility customers operate their plants safely and reliably."
+text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
+       "electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process " \
+       "called fission the splitting of uranium atoms in a nuclear reactor. Uranium fuel consists of small, " \
+       "hard ceramic pellets that are packaged into long, vertical tubes. Bundles of this fuel are inserted into the " \
+       "reactor. A single uranium pellet, slightly larger than a pencil eraser, contains the same energy as a ton of " \
+       "coal, 3 barrels of oil, or 17,000 cubic feet of natural gas. Each uranium fuel pellet provides up to five " \
+       "years of heat for power generation. And because uranium is one of the world's most abundant metals, " \
+       "it can provide fuel for the world's commercial nuclear plants for generations to come. Nuclear power offers " \
+       "many benefits for the environment as well. Power plants don't burn any materials so they produce no " \
+       "combustion by-products. Additionally, because they don't produce greenhouse gases, nuclear plants help " \
+       "protect air quality and mitigate climate change. When it comes to efficiency and reliability, " \
+       "no other electricity source can match nuclear. Nuclear power plants can continuously generate large-scale, " \
+       "around-the-clock electricity for many months at a time, without interruption. Currently, nuclear energy " \
+       "supplies 12 percent of the world's electricity and approximately 20 percent of the energy in the United " \
+       "States. As of 2018, a total of 30 countries worldwide are operating 450 nuclear reactors for electricity " \
+       "generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the " \
+       "industry benchmark for reactor design and construction and helping utility customers operate their plants " \
+       "safely and reliably. "
 print("--------------------\n", text, "\n-----------------------\n")
 
 # =========================TEXT AND ARRAY FOMATTING=========================#
