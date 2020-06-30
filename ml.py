@@ -49,6 +49,7 @@ for i in range(len(gen)):
     temp = gen[i][0]
     gen[i][0] = gen[i][1]
     gen[i][1] = temp
+
 print("GEN WEIGHTS------------------------\n", gen, "\n")
 
 # =========================FUNCTIONS=========================#
@@ -65,59 +66,31 @@ print("GEN WEIGHTS------------------------\n", gen, "\n")
 #                 array[j + 1] = tempo
 #     return array
 
-
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
 
 # empty list holds custom weight adjustments
 wList = []
 for w in y:
     freq = round(float(zipf_frequency(w, 'en')), 3)  # finds the frequency of each unique word in text
-    wList.append([round((10 - freq) / 10, 2), w])  # adds the custom weight to wList
+    wList.append([(9.5-freq)/5, w])  # adds the custom weight to wList
 print("OUR WEIGHTS------------------------\n", wList, "\n")
-
-# =========================HANDLING DUPLICATES AND PLURALS=========================#
-
-tbd = []
-for a in range(len(wList) - 1):
-    for b in range(len(wList) - 1):
-        if wList[a][1].lower() == wList[b][1].lower() and wList[a][1] != wList[b][1]:  # identifies duplicate words with different capitalization
-            # print("Same", wList[a][1], wList[b][1])
-            wList[a][0] = (wList[a][0] + wList[b][0]) / 2  # average both duplicate weights
-            tbd.append(wList[b][1])  # store name of word to be deleted
-        # if wList[a][1] in wList[b][1]:
-        #     if wList[b][1] == wList[a][1] + "ing" or wList[b][1] == wList[a][1] + "s":  # identifies plural and verb forms of word
-        #         #print(wList[a][1], wList[b][1])
-
-# loop through tbd and delete each word
 
 # =========================WEIGHT ADJUSTMENT=========================#
 
 # what constitutes a keyword?
 # custom boost will hold the final boost we apply to genism weight
-custom_boost = 0
 
 added = []  # keeps track of what has been added
 boosts = []  # keeps track of boosts applied to each word
-
-# for a in range(len(gen)):
-#     for b in range(len(wList)):
-#         if wList[b][1] in gen[a][0]:
-#             gen[a][1] += (gen[a][1]+wList[b][0])/2 + custom_boost  # for each word in genism keyword, add our custom weight to the genism weight
-#             added.append(wList[b][1])
-#             # boosts.append(wList[b][1]) #debug purposes
-#             # boosts.append(wList[b][0]-(len(gen[a][0])/80)) #debug purposes
-#         else:
-#             if wList[b][1] not in added:  # if the word isn't in any list returned by genism, create a new entry
-#                 gen.append([wList[b][1], wList[b][0] + custom_boost])
-#                 added.append(wList[b][1])
 
 added = []
 for i in range(len(gen)):
     # for word in gen[i][0].split(" "):
     for a in wList:
         if a[1] in gen[i][1].split(" "):
+            custom_boost = a[0]
             # print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
-            gen[i][0] += a[0] + custom_boost
+            gen[i][0] += custom_boost
             # print("result", gen[i][1])
             if a[1] not in added:
                 added.append(a[1])
@@ -125,13 +98,34 @@ for i in range(len(gen)):
 for w in wList:
     gen.append([w[0], w[1]])
 
-print("NEW GEN-------------------------------\n", sorted(gen), "\n")
+# =========================HANDLING DUPLICATES AND PLURALS=========================#
+
+tbd = []
+for a in range(len(sorted(gen))-1):
+    for b in range(len(sorted(gen))-1):
+        if gen[a][1].lower() == gen[b][1].lower() and gen[a][1] != gen[b][1]:  # identifies duplicate words with different capitalization
+            print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
+            gen[a][0] = (gen[a][0] + gen[b][0]) / 2  # average both duplicate weights
+            print("adjusted", gen[a][0])
+            if gen[b][1].lower() not in tbd:
+                tbd.append(gen[b][1].lower())  # store name of word to be deleted
+        # if wList[a][1] in wList[b][1]:
+        #     if wList[b][1] == wList[a][1] + "ing" or wList[b][1] == wList[a][1] + "s":  # identifies plural and verb forms of word
+        #         #print(wList[a][1], wList[b][1])
+
+# loop through tbd and delete each word
+for deleted in tbd:
+    for word in gen:
+        if deleted==word[1]:
+            del word
+
 
 # =========================DEBUG=========================#
 
-# print(text.count("fission"))
-# for i in gen:
-#     print(i)
+print("FINAL WEIGHT RANKING-------------------------------\n")
+
+for i in sorted(gen):
+    print(i)
 
 # =========================EXTRA/UNUSED CODE=========================#
 
