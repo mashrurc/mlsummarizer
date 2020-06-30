@@ -1,9 +1,10 @@
 # =========================IMPORTS=========================#
 
 # import word frequency and keyword extraction libraries
+
 from wordfreq import zipf_frequency, word_frequency
 from gensim.summarization import keywords
-
+import wikipedia
 # Sample Text
 text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
        "electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process " \
@@ -56,16 +57,21 @@ print("GEN WEIGHTS------------------------\n", gen, "\n")
 
 # Weighted Sorting
 # sort algorithm sorts the gen list by weight ascending
-# def indexedSort(array):
-#     l = len(array)
-#     for i in range(0, l):
-#         for j in range(0, l - i - 1):
-#             if array[j][1] > array[j + 1][1]:
-#                 tempo = array[j]
-#                 array[j] = array[j + 1]
-#                 array[j + 1] = tempo
-#     return array
+def indexedSort(array):
+    l = len(array)
+    for i in range(0, l):
+        for j in range(0, l - i - 1):
+            if array[j][1] > array[j + 1][1]:
+                tempo = array[j]
+                array[j] = array[j + 1]
+                array[j + 1] = tempo
+    return array
 
+final = []
+def finalList(l):
+    for items in l:
+        final.append(items[1])
+    return final
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
 
 # empty list holds custom weight adjustments
@@ -127,6 +133,22 @@ print("FINAL WEIGHT RANKING-------------------------------\n")
 for i in sorted(gen):
     print(i)
 
+
+
+# keywords = finalList(indexedSort(gen))
+keywords = ["Nuclear Fusion", "Nuclear Fission", "Nuclear Reactors", "Hitachi"]
+print(keywords)
+info = []
+c = 0
+for w in keywords:
+    try:
+        # print(w)
+        # print(wikipedia.summary(w, sentences=3))
+        info.append(wikipedia.summary(w, sentences=1))
+    except: pass
+print("============================WIKI SUMMARY===================================")
+print(info)
+print("===========================================================================")
 # =========================EXTRA/UNUSED CODE=========================#
 
 # print(y)
