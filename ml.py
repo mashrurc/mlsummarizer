@@ -4,7 +4,7 @@
 
 from wordfreq import zipf_frequency, word_frequency
 from gensim.summarization import keywords
-import wikipedia
+# import wikipedia
 # Sample Text
 text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
        "electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process " \
@@ -110,45 +110,53 @@ tbd = []
 for a in range(len(sorted(gen))-1):
     for b in range(len(sorted(gen))-1):
         if gen[a][1].lower() == gen[b][1].lower() and gen[a][1] != gen[b][1]:  # identifies duplicate words with different capitalization
-            print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
-            gen[a][0] = (gen[a][0] + gen[b][0]) / 2  # average both duplicate weights
-            print("adjusted", gen[a][0])
             if gen[b][1].lower() not in tbd:
+                print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])  # average both duplicate weights
+                gen[b][0] = (gen[a][0] + gen[b][0]) / 2
+                print("adjusted", gen[b][0])
                 tbd.append(gen[b][1].lower())  # store name of word to be deleted
-        # if wList[a][1] in wList[b][1]:
-        #     if wList[b][1] == wList[a][1] + "ing" or wList[b][1] == wList[a][1] + "s":  # identifies plural and verb forms of word
-        #         #print(wList[a][1], wList[b][1])
+        if gen[a][1] in gen[b][1]:
+            if gen[b][1] == gen[a][1] + "ing" or gen[b][1] == gen[a][1] + "s" and len(gen[a][1])>1 and len(gen[b][1])>1:  # identifies plural and verb forms of word
+                if gen[b][1].lower() not in tbd:
+                    print("plural-ing", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
+                    gen[b][0] = (gen[a][0] + gen[b][0]) / 2
+                    print("adjusted", gen[b][0]) #DOESNT ADJUST JUST KEEPS GEN[A][1] WEIGHT FIXXXXXX
+                    tbd.append(gen[b][1].lower())
 
-# loop through tbd and delete each word
+print(tbd)
+
+t=0
 for deleted in tbd:
-    for word in gen:
-        if deleted==word[1]:
-            del word
-
+    for a in gen:
+        if deleted==a[1]:
+            del gen[t]
+            t-=1
+        t+=1
+    t=0
 
 # =========================DEBUG=========================#
 
-print("FINAL WEIGHT RANKING-------------------------------\n")
+print("FINAL WEIGHT RANKINGS-------------------------------\n")
 
 for i in sorted(gen):
     print(i)
 
 
 
-# keywords = finalList(indexedSort(gen))
-keywords = ["Nuclear Fusion", "Nuclear Fission", "Nuclear Reactors", "Hitachi"]
-print(keywords)
-info = []
-c = 0
-for w in keywords:
-    try:
-        # print(w)
-        # print(wikipedia.summary(w, sentences=3))
-        info.append(wikipedia.summary(w, sentences=1))
-    except: pass
-print("============================WIKI SUMMARY===================================")
-print(info)
-print("===========================================================================")
+# # keywords = finalList(indexedSort(gen))
+# keywords = ["Nuclear Fusion", "Nuclear Fission", "Nuclear Reactors", "Hitachi"]
+# print(keywords)
+# info = []
+# c = 0
+# for w in keywords:
+#     try:
+#         # print(w)
+#         # print(wikipedia.summary(w, sentences=3))
+#         info.append(wikipedia.summary(w, sentences=1))
+#     except: pass
+# print("============================WIKI SUMMARY===================================")
+# print(info)
+# print("===========================================================================")
 # =========================EXTRA/UNUSED CODE=========================#
 
 # print(y)
