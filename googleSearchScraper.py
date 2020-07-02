@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # The term we want to search for
-query = "Joe Joe"
+query = "Nuclear Fission"
 
 # Replace all spaces of given query with '+'
 query.replace(' ', '+')
@@ -21,13 +21,27 @@ URL2 = "https://google.com{}".format(videoLink)
 # print(URL2)
 
 # Creates a GET request based on the URL, inputs the raw code for BS4 to interpret
-webPage = BeautifulSoup(requests.get(URL, headers=headers).content, features="html.parser")
+webPage = BeautifulSoup(requests.get(URL2, headers=headers).content, features="html.parser")
 # print(webPage.prettify())
 
-divTags = []
-divTags = webPage.find_all("h3", {"class": "LC20lb DKV0Md"})
+videoTitles = []
+videoLinks = []
+videoList = []
+videos = []
 
-print(divTags)
+videos = webPage.find_all("div", {"class": "r"})
+
+for video in videos:
+    videoList.append([video.find("h3", {"class": "LC20lb DKV0Md"}).text, video.find("a").get("href")])
+    videoTitles.append(video.find("h3", {"class": "LC20lb DKV0Md"}).text)
+    videoLinks.append(video.find("a").get("href"))
+
+print("=========== FULL VIDEO PROFILE ==================")
+print("{} \n".format(videoList))
+print("=========== VIDEO LINKS ==================")
+print("{} \n".format(videoTitles))
+print("=========== VIDEO TITLES ==================")
+print("{} \n".format(videoLinks))
 
 # In order to use this, you must pay for your API key
 
