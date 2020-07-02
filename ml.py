@@ -4,6 +4,7 @@
 
 from wordfreq import zipf_frequency, word_frequency
 from gensim.summarization import keywords
+
 # import wikipedia
 # Sample Text
 text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
@@ -53,6 +54,7 @@ for i in range(len(gen)):
 
 print("\nGEN WEIGHTS------------------------\n", gen, "\n")
 
+
 # =========================FUNCTIONS=========================#
 
 # Weighted Sorting
@@ -67,52 +69,64 @@ def indexedSort(array):
                 array[j + 1] = tempo
     return array
 
+
 final = []
+
+
 def finalList(l):
     for items in l:
         final.append(items[1])
     return final
+
+
+def pluralRemove(arr):
+    tbd = []
+    for a in range(len(sorted(arr)) - 1):
+        for b in range(len(sorted(arr)) - 1):
+            if arr[a][1].lower() == arr[b][1].lower() and arr[a][1] != arr[b][1]:  # identifies duplicate words with different capitalization
+                if arr[b][1].lower() not in tbd:
+                    print("Same", arr[a][1], arr[a][0], "and", arr[b][1], arr[b][0])  # average both duplicate weights
+                    arr[b][0] = (arr[a][0] + arr[b][0]) / 2
+                    print("adjusted", arr[b][0])
+                    tbd.append(arr[b][1].lower())  # store name of word to be deleted
+            if arr[a][1] in arr[b][1]:
+                if arr[b][1] == arr[a][1] + "ing" or arr[b][1] == arr[a][1] + "s" or arr[b][1] == arr[a][1] + "r" or \
+                        arr[b][1] == arr[a][1] + "er" or arr[b][1] == arr[a][1] + "est" and len(arr[a][1]) > 1 and len(arr[b][1]) > 1:  # identifies plural and verb forms of word
+                    if arr[b][1].lower() not in tbd:
+                        print("plural-ing", arr[a][1], arr[a][0], "and", arr[b][1], arr[b][0])
+                        arr[a][0] = (arr[a][0] + arr[b][0]) / 2
+                        print("adjusted", arr[a][0])
+                        tbd.append(arr[b][1].lower())
+
+    print(tbd)
+
+    t = 0
+    for deleted in tbd:
+        for a in arr:
+            if deleted == a[1]:
+                del arr[t]
+                t -= 1
+            t += 1
+        t = 0
+
+
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
 
 # empty list holds custom weight adjustments
 wList = []
 for w in y:
     freq = round(float(zipf_frequency(w, 'en')), 3)  # finds the frequency of each unique word in text
-    wList.append([(9.5-freq)/5, w])  # adds the custom weight to wList
+    wList.append([(9.5 - freq) / 5, w])  # adds the custom weight to wList
 print("\nOUR WEIGHTS------------------------\n", wList, "\n")
 
 # =========================HANDLING DUPLICATES AND PLURALS=========================#
 
+pluralRemove(wList)
+
 for w in wList:
     gen.append([w[0], w[1]])
 
-tbd = []
-for a in range(len(sorted(gen))-1):
-    for b in range(len(sorted(gen))-1):
-        if gen[a][1].lower() == gen[b][1].lower() and gen[a][1] != gen[b][1]:  # identifies duplicate words with different capitalization
-            if gen[b][1].lower() not in tbd:
-                print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])  # average both duplicate weights
-                gen[b][0] = (gen[a][0] + gen[b][0]) / 2
-                print("adjusted", gen[b][0])
-                tbd.append(gen[b][1].lower())  # store name of word to be deleted
-        if gen[a][1] in gen[b][1]:
-            if gen[b][1] == gen[a][1] + "ing" or gen[b][1] == gen[a][1] + "s" or gen[b][1] == gen[a][1] + "r" or gen[b][1] == gen[a][1] + "er" or gen[b][1] == gen[a][1] + "est" and len(gen[a][1])>1 and len(gen[b][1])>1:  # identifies plural and verb forms of word
-                if gen[b][1].lower() not in tbd:
-                    print("plural-ing", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
-                    gen[a][0] = (gen[a][0] + gen[b][0]) / 2
-                    print("adjusted", gen[a][0]) 
-                    tbd.append(gen[b][1].lower())
-
-print(tbd)
-
-t=0
-for deleted in tbd:
-    for a in gen:
-        if deleted==a[1]:
-            del gen[t]
-            t-=1
-        t+=1
-    t=0
+pluralRemove(gen)
 
 ## DO THE SAME DELETION PROCESS FOR OUR WEIGHTS BEFORE WEIGHT ASJUSTMENT 
 
@@ -138,12 +152,15 @@ for i in range(len(gen)):
 
 # =========================DEBUG=========================#
 
-print("FINAL WEIGHT RANKINGS-------------------------------\n")
+print("FINAL WEIGHT RANKINGS GEN-------------------------------\n")
 
 for i in sorted(gen):
     print(i)
 
+print("FINAL WEIGHT RANKINGS WLIST-------------------------------\n")
 
+for i in sorted(wList):
+    print(i)
 
 # # keywords = finalList(indexedSort(gen))
 # keywords = ["Nuclear Fusion", "Nuclear Fission", "Nuclear Reactors", "Hitachi"]
