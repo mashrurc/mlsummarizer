@@ -51,7 +51,7 @@ for i in range(len(gen)):
     gen[i][0] = gen[i][1]
     gen[i][1] = temp
 
-print("GEN WEIGHTS------------------------\n", gen, "\n")
+print("\nGEN WEIGHTS------------------------\n", gen, "\n")
 
 # =========================FUNCTIONS=========================#
 
@@ -79,7 +79,42 @@ wList = []
 for w in y:
     freq = round(float(zipf_frequency(w, 'en')), 3)  # finds the frequency of each unique word in text
     wList.append([(9.5-freq)/5, w])  # adds the custom weight to wList
-print("OUR WEIGHTS------------------------\n", wList, "\n")
+print("\nOUR WEIGHTS------------------------\n", wList, "\n")
+
+# =========================HANDLING DUPLICATES AND PLURALS=========================#
+
+for w in wList:
+    gen.append([w[0], w[1]])
+
+tbd = []
+for a in range(len(sorted(gen))-1):
+    for b in range(len(sorted(gen))-1):
+        if gen[a][1].lower() == gen[b][1].lower() and gen[a][1] != gen[b][1]:  # identifies duplicate words with different capitalization
+            if gen[b][1].lower() not in tbd:
+                print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])  # average both duplicate weights
+                gen[b][0] = (gen[a][0] + gen[b][0]) / 2
+                print("adjusted", gen[b][0])
+                tbd.append(gen[b][1].lower())  # store name of word to be deleted
+        if gen[a][1] in gen[b][1]:
+            if gen[b][1] == gen[a][1] + "ing" or gen[b][1] == gen[a][1] + "s" or gen[b][1] == gen[a][1] + "r" or gen[b][1] == gen[a][1] + "er" or gen[b][1] == gen[a][1] + "est" and len(gen[a][1])>1 and len(gen[b][1])>1:  # identifies plural and verb forms of word
+                if gen[b][1].lower() not in tbd:
+                    print("plural-ing", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
+                    gen[a][0] = (gen[a][0] + gen[b][0]) / 2
+                    print("adjusted", gen[a][0]) 
+                    tbd.append(gen[b][1].lower())
+
+print(tbd)
+
+t=0
+for deleted in tbd:
+    for a in gen:
+        if deleted==a[1]:
+            del gen[t]
+            t-=1
+        t+=1
+    t=0
+
+## DO THE SAME DELETION PROCESS FOR OUR WEIGHTS BEFORE WEIGHT ASJUSTMENT 
 
 # =========================WEIGHT ADJUSTMENT=========================#
 
@@ -100,39 +135,6 @@ for i in range(len(gen)):
             # print("result", gen[i][1])
             if a[1] not in added:
                 added.append(a[1])
-
-for w in wList:
-    gen.append([w[0], w[1]])
-
-# =========================HANDLING DUPLICATES AND PLURALS=========================#
-
-tbd = []
-for a in range(len(sorted(gen))-1):
-    for b in range(len(sorted(gen))-1):
-        if gen[a][1].lower() == gen[b][1].lower() and gen[a][1] != gen[b][1]:  # identifies duplicate words with different capitalization
-            if gen[b][1].lower() not in tbd:
-                print("Same", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])  # average both duplicate weights
-                gen[b][0] = (gen[a][0] + gen[b][0]) / 2
-                print("adjusted", gen[b][0])
-                tbd.append(gen[b][1].lower())  # store name of word to be deleted
-        if gen[a][1] in gen[b][1]:
-            if gen[b][1] == gen[a][1] + "ing" or gen[b][1] == gen[a][1] + "s" and len(gen[a][1])>1 and len(gen[b][1])>1:  # identifies plural and verb forms of word
-                if gen[b][1].lower() not in tbd:
-                    print("plural-ing", gen[a][1], gen[a][0], "and", gen[b][1], gen[b][0])
-                    gen[b][0] = (gen[a][0] + gen[b][0]) / 2
-                    print("adjusted", gen[b][0]) #DOESNT ADJUST JUST KEEPS GEN[A][1] WEIGHT FIXXXXXX
-                    tbd.append(gen[b][1].lower())
-
-print(tbd)
-
-t=0
-for deleted in tbd:
-    for a in gen:
-        if deleted==a[1]:
-            del gen[t]
-            t-=1
-        t+=1
-    t=0
 
 # =========================DEBUG=========================#
 
