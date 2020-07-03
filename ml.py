@@ -69,10 +69,7 @@ def indexedSort(array):
                 array[j + 1] = tempo
     return array
 
-
 final = []
-
-
 def finalList(l):
     for items in l:
         final.append(items[1])
@@ -99,7 +96,6 @@ def pluralRemove(arr):
                         tbd.append(arr[b][1].lower())
 
     print(tbd)
-
     t = 0
     for deleted in tbd:
         for a in arr:
@@ -109,6 +105,12 @@ def pluralRemove(arr):
             t += 1
         t = 0
 
+def avgWeight(arr):
+    count=0
+    for i in arr:
+        count+=i[0]
+    avg=count/len(arr)
+    print("AVERAGE OF GEN", avg)
 
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
 
@@ -128,8 +130,6 @@ for w in wList:
 
 pluralRemove(gen)
 
-## DO THE SAME DELETION PROCESS FOR OUR WEIGHTS BEFORE WEIGHT ASJUSTMENT 
-
 # =========================WEIGHT ADJUSTMENT=========================#
 
 # what constitutes a keyword?
@@ -142,24 +142,26 @@ added = []
 for i in range(len(gen)):
     # for word in gen[i][0].split(" "):
     for a in wList:
-        if a[1] in gen[i][1].split(" "):
+        if a[1].lower() in gen[i][1].split(" "):
             custom_boost = a[0]
-            # print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
+            #print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
             gen[i][0] += custom_boost
             # print("result", gen[i][1])
             if a[1] not in added:
                 added.append(a[1])
 
+# =========================AVERAGE REMOVAL=========================#
+
+avgWeight(gen)
+
 # =========================DEBUG=========================#
 
-print("FINAL WEIGHT RANKINGS GEN-------------------------------\n")
-
-for i in sorted(gen):
+print("FINAL WEIGHT RANKINGS WLIST-------------------------------\n")
+for i in sorted(wList):
     print(i)
 
-print("FINAL WEIGHT RANKINGS WLIST-------------------------------\n")
-
-for i in sorted(wList):
+print("FINAL WEIGHT RANKINGS GEN-------------------------------\n")
+for i in sorted(gen):
     print(i)
 
 # # keywords = finalList(indexedSort(gen))
