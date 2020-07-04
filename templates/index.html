@@ -195,8 +195,10 @@
     }
       </style>
     <body>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
       <p id="ans"></p>
       <!-- <input id= "result" type=text size=5 name=proglang> -->
+      
       <button id="button" >Start listening</button>
       
       <br>
@@ -206,9 +208,15 @@
 
       </main>
       <button id="button2"><a id="process">Start</a></button> 
-
+      <button id="button2" onclick="pdf()">Download PDF</button>
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <script>
+        function pdf(){
+          var doc = new jsPDF();
+doc.text(10, 10, 'Summary of Lecture'); //insert the text from python into here 
+doc.save('Lecture-Summary.pdf');
+          console.log("AA")
+        }
         $(function() {
 			  $('a#process').bind('click', function() {
         var x = document.getElementById("result").textContent;
