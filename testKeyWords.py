@@ -1,6 +1,6 @@
-from PyDictionary import PyDictionary
+#from PyDictionary import PyDictionary
 import wikipedia
-import ml
+import keywordGen
 
 keywords = ["Nuclear Fusion", "Hitachi", "nuclear reactors", "Uranium fuel", "climate change"]
 info = []
