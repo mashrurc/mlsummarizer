@@ -231,16 +231,19 @@
                         url: '/postendpoint/',
                         type: "POST",
                         data: {
-                            data: "DATA EXAMPLE"
+                            data: document.getElementById("result").textContent
                         },
                         success: function(response) {
                             console.log(response);
                             console.log("success");
+                            var doc = new jsPDF();
+                            doc.text(10, 10, response); //insert the text from python into here 
+                            doc.save('Lecture-Summary.pdf');
+                            console.log("AA")
                         },
                         complete: function() {
                             // console.log(response.text);
                             console.log("completed");
-
                         },
                         // what to do when there is an error
                         error: function(xhr, textStatus, thrownError) {}
