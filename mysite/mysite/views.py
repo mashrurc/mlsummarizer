@@ -2,8 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from wordfreq import zipf_frequency, word_frequency
-from gensim.summarization import keywords
+from gensim.summarization import keywords, summarize
+from textwrap import wrap
+from fpdf import FPDF
 import json
+import wikipedia
+import pdfkit
 
 
 
@@ -21,25 +25,27 @@ def backgroundProcess(request):
         print(request.POST.get('data'))
         x = request.POST.get('data')
         text = x
-        # text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
-        #        "electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process " \
-        #        "called fission the splitting of uranium atoms in a nuclear reactor. Uranium fuel consists of small, " \
-        #        "hard ceramic pellets that are packaged into long, vertical tubes. Bundles of this fuel are inserted into the " \
-        #        "reactor. A single uranium pellet, slightly larger than a pencil eraser, contains the same energy as a ton of " \
-        #        "coal, 3 barrels of oil, or 17,000 cubic feet of natural gas. Each uranium fuel pellet provides up to five " \
-        #        "years of heat for power generation. And because uranium is one of the world's most abundant metals, " \
-        #        "it can provide fuel for the world's commercial nuclear plants for generations to come. Nuclear power offers " \
-        #        "many benefits for the environment as well. Power plants don't burn any materials so they produce no " \
-        #        "combustion by-products. Additionally, because they don't produce greenhouse gases, nuclear plants help " \
-        #        "protect air quality and mitigate climate change. When it comes to efficiency and reliability, " \
-        #        "no other electricity source can match nuclear. Nuclear power plants can continuously generate large-scale, " \
-        #        "around-the-clock electricity for many months at a time, without interruption. Currently, nuclear energy " \
-        #        "supplies 12 percent of the world's electricity and approximately 20 percent of the energy in the United " \
-        #        "States. As of 2018, a total of 30 countries worldwide are operating 450 nuclear reactors for electricity " \
-        #        "generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the " \
-        #        "industry benchmark for reactor design and construction and helping utility customers operate their plants " \
-        #        "safely and reliably."
-
+        text = "Nuclear power is a clean and efficient way of boiling water to make steam, which turns turbines to produce " \
+       "electricity. Nuclear power plants use low-enriched uranium fuel to produce electricity through a process " \
+       "called fission the splitting of uranium atoms in a nuclear reactor. Uranium fuel consists of small, " \
+       "hard ceramic pellets that are packaged into long, vertical tubes. Bundles of this fuel are inserted into the " \
+       "reactor. A single uranium pellet, slightly larger than a pencil eraser, contains the same energy as a ton of " \
+       "coal, 3 barrels of oil, or 17,000 cubic feet of natural gas. Each uranium fuel pellet provides up to five " \
+       "years of heat for power generation. And because uranium is one of the world's most abundant metals, " \
+       "it can provide fuel for the world's commercial nuclear plants for generations to come. Nuclear power offers " \
+       "many benefits for the environment as well. Power plants don't burn any materials so they produce no " \
+       "combustion by-products. Additionally, because they don't produce greenhouse gases, nuclear plants help " \
+       "protect air quality and mitigate climate change. When it comes to efficiency and reliability, " \
+       "no other electricity source can match nuclear. Nuclear power plants can continuously generate large-scale, " \
+       "around-the-clock electricity for many months at a time, without interruption. Currently, nuclear energy " \
+       "supplies 12 percent of the world's electricity and approximately 20 percent of the energy in the United " \
+       "States. As of 2018, a total of 30 countries worldwide are operating 450 nuclear reactors for electricity " \
+       "generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the " \
+       "industry benchmark for reactor design and construction and helping utility customers operate their plants " \
+       "safely and reliably."
+        s = summarize(text)
+        summarized = s.replace("\n", "  ")
+        wraped_text = "\n".join(wrap(summarized, 80))
         print("--------------------\n", text, "\n-----------------------\n")
 
         # =========================TEXT AND ARRAY FOMATTING=========================#
@@ -169,20 +175,39 @@ def backgroundProcess(request):
         avgWeight(gen)
 
         # =========================DEBUG=========================#
-
-        print("FINAL WEIGHT RANKINGS WLIST-------------------------------\n")
-        for i in sorted(wList):
+        definitions = []
+        count = 0
+        print("FINAL WEIGHT RANKINGS WLIST-------------------------------------\n")
+        for i in sorted(wList,reverse=True):
             print(i)
-            returning += i[1] +" "
+            if count <= int(len(wList)/14):
+                try:
+                    definitions.append((i[1], wikipedia.summary(i[1], sentences=1)))
+                except:
+                    print("error")
+                    count-=1
+            if count > int(len(wList)/9):
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", count)
+                break
+            # returning += i[1] +" "
+            count+=1
+    
+        print("Definitions------------------------------------\n")
+        print(definitions)
+        for x in definitions:
+            returning += x[0]+ " : "+x[1]+"\n\n"
 
-        print("FINAL WEIGHT RANKINGS GEN-------------------------------\n")
-        for i in sorted(gen):
+        print("FINAL WEIGHT RANKINGS GEN------------------------------------\n")
+        for i in sorted(gen, reverse=True):
             print(i)
         
         print(returning)
+        
+        finalreturn = summarized + "\n\n" +returning
+        
             
       
-   return HttpResponse(returning)
+   return HttpResponse(finalreturn)
 # =========================IMPORTS=========================#
 
 # import word frequency and keyword extraction libraries
