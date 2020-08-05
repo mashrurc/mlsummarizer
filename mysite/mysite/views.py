@@ -10,7 +10,6 @@ import wikipedia
 import pdfkit
 
 
-
 @csrf_exempt
 def index(request):
     return render(None, 'index.html')
