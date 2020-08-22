@@ -26,6 +26,7 @@ text = "Nuclear power is a clean and efficient way of boiling water to make stea
        "generation. For decades, GE and Hitachi have been at the forefront of nuclear technology, setting the " \
        "industry benchmark for reactor design and construction and helping utility customers operate their plants " \
        "safely and reliably."
+
 print(summarize(text))
 print("--------------------\n", text, "\n-----------------------\n")
 
@@ -70,7 +71,10 @@ def indexedSort(array):
                 array[j + 1] = tempo
     return array
 
+
 final = []
+
+
 def finalList(l):
     for items in l:
         final.append(items[1])
@@ -81,7 +85,8 @@ def pluralRemove(arr):
     tbd = []
     for a in range(len(sorted(arr)) - 1):
         for b in range(len(sorted(arr)) - 1):
-            if arr[a][1].lower() == arr[b][1].lower() and arr[a][1] != arr[b][1]:  # identifies duplicate words with different capitalization
+            if arr[a][1].lower() == arr[b][1].lower() and arr[a][1] != arr[b][
+                1]:  # identifies duplicate words with different capitalization
                 if arr[b][1].lower() not in tbd:
                     print("Same", arr[a][1], arr[a][0], "and", arr[b][1], arr[b][0])  # average both duplicate weights
                     arr[b][0] = (arr[a][0] + arr[b][0]) / 2
@@ -89,7 +94,8 @@ def pluralRemove(arr):
                     tbd.append(arr[b][1].lower())  # store name of word to be deleted
             if arr[a][1] in arr[b][1]:
                 if arr[b][1] == arr[a][1] + "ing" or arr[b][1] == arr[a][1] + "s" or arr[b][1] == arr[a][1] + "r" or \
-                        arr[b][1] == arr[a][1] + "er" or arr[b][1] == arr[a][1] + "est" and len(arr[a][1]) > 1 and len(arr[b][1]) > 1:  # identifies plural and verb forms of word
+                        arr[b][1] == arr[a][1] + "er" or arr[b][1] == arr[a][1] + "est" and len(arr[a][1]) > 1 and len(
+                    arr[b][1]) > 1:  # identifies plural and verb forms of word
                     if arr[b][1].lower() not in tbd:
                         print("plural-ing", arr[a][1], arr[a][0], "and", arr[b][1], arr[b][0])
                         arr[a][0] = (arr[a][0] + arr[b][0]) / 2
@@ -106,12 +112,14 @@ def pluralRemove(arr):
             t += 1
         t = 0
 
+
 def avgWeight(arr):
-    count=0
+    count = 0
     for i in arr:
-        count+=i[0]
-    avg=count/len(arr)
+        count += i[0]
+    avg = count / len(arr)
     print("AVERAGE OF GEN", avg)
+
 
 # =========================CUSTOM WEIGHT ALGORITHM=========================#
 
@@ -145,7 +153,7 @@ for i in range(len(gen)):
     for a in wList:
         if a[1].lower() in gen[i][1].split(" "):
             custom_boost = a[0]
-            #print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
+            # print("adding", gen[i][0],":",gen[i][1], a[1],":",a[0])
             gen[i][0] += custom_boost
             # print("result", gen[i][1])
             if a[1] not in added:
