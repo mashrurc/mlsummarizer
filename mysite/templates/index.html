@@ -155,10 +155,8 @@
             background-color: #4CAF50;
             /* Green */
             border: #fff;
-            width: 20%;
+            width: 34%;
             border-radius: 12px;
-            margin-left: 40%;
-            margin-right: 40%;
             color: white;
             padding: 15px 32px;
             text-align: center;
@@ -166,8 +164,53 @@
             display: inline-block;
             font-size: 16px;
         }
+
+        #fileInput {
+            background-color: #4CAF50;
+            /* Green */
+            border: #fff;
+            width: 30%;
+            border-radius: 12px;
+            color: white;
+            padding: 15px 32px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
         
         #button2 {
+            background-color: #333333;
+            /* Green */
+            border: #fff;
+            width: 20%;
+            border-radius: 3px;
+            margin-left: 40%;
+            margin-right: 40%;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: none;
+            font-size: 16px;
+        }
+
+        #button3 {
+            background-color: #333333;
+            /* Green */
+            border: #fff;
+            width: 20%;
+            border-radius: 3px;
+            margin-left: 40%;
+            margin-right: 40%;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: none;
+            font-size: 16px;
+        }
+
+        #upload {
             background-color: #333333;
             /* Green */
             border: #fff;
@@ -199,14 +242,24 @@
             color: #f22f46;
             text-align: center;
         }
+
+        .parent {
+            margin-left: 25%;
+        }
     </style>
 
     <body>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
         <p id="ans"></p>
         <!-- <input id= "result" type=text size=5 name=proglang> -->
+        <div class="parent">
+            <button id="button">Start listening</button>
+            <input type="file" id="fileInput" name="fileInput" accept="image/jpeg">
+        </div>
 
-        <button id="button">Start listening</button>
+        <button id="upload" onclick="imageDisplay()">Upload</button>
+
+        <img src="" id="imageTest">
 
         <br>
         <br>
@@ -214,8 +267,8 @@
             <p id="result" type=t ext size=5 name=p roglang></p>
 
         </main>
-        <button id="button2"><a id="process">Start</a></button>
-        <button id="button2" onclick="pdf()">Download PDF</button>
+        <button id="button2"> <a id="process">Start</a></button>
+        <button id="button3" onclick="pdf()">Download PDF</button>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>
             function pdf() {
@@ -223,6 +276,12 @@
                 doc.text(10, 10, 'Summary of Lecture'); //insert the text from python into here 
                 doc.save('Lecture-Summary.pdf');
                 console.log("AA")
+            }
+
+            function imageDisplay(){
+                const image = document.getElementById("imageTest");
+                const path = document.getElementById("fileInput").value;
+                image.src = path;
             }
 
             $(function() {
@@ -266,9 +325,15 @@
             //   });
             // });
 
+            if(document.getElementById("fileInput").value !== "") {
+                document.getElementById("fileInput").value;
+            }
+
             window.addEventListener("DOMContentLoaded", () => {
                 const button = document.getElementById("button");
                 const result = document.getElementById("result");
+                const button2 = document.getElementById("button2");
+                const button3 = document.getElementById("button3");
                 const main = document.getElementsByTagName("main")[0];
 
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -284,8 +349,12 @@
                         recognition.start();
                         button.textContent = "Stop listening";
                         main.classList.add("speaking");
+
                     };
                     const stop = () => {
+                        console.log("STOP");
+                        button2.style.display = "inline-block";
+                        button3.style.display = "inline-block";
                         recognition.stop();
                         button.textContent = "Start listening";
                         main.classList.remove("speaking");
