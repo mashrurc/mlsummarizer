@@ -1,1 +1,0 @@
-# mashyc.github.io
